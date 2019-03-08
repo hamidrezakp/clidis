@@ -38,7 +38,7 @@ printMenu() {
 		# increase deCounter until desktop environments finished...
 		((deCounter++))
 	done
-	echo -e "\nMove with arrow keys , vim keys :) and select with Enter or SpaceBar.\n"
+	echo -e "\n${blueColor}Move with arrow keys , vim keys :) and select with Enter or SpaceBar.${resetColor}\n"
 }
 
 # function to change items
