@@ -103,42 +103,32 @@ printBanner() {
 }
 
 
-# function to check if another desktop environment is running
-isXserverRunning() {
-	if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-		return 0
-	else
-		return 1
-	fi
-}
-
 # function to start desktop environment
 function startDesktop {
-	if [[ $1 -eq 0 ]] ; then
+	if [[ $1 == "TTY" ]] ; then
 		tput clear
 		exec $SHELL
 	fi
 	if [ -e ~/.xinitrc ] ; then
 		mv ~/.xinitrc ~/.xinitrc-$(date +%m-%d-%H-%M-%S)-bak
 	fi		
-	# get the name of desktop environment
-	chosenDesktop=$(echo $desktops | tr " " "\n" | sed -n "$1 p")
 	# start chosen desktop environment from Exec command in .desktop file!
-	echo "${greenColor}starting $chosenDesktop ! please wait... ${resetColor}"
-	execCommand=$(which $(grep "^Exec" /usr/share/xsessions/"$chosenDesktop".desktop | sed 's/Exec=//'))	
+	echo "${greenColor}starting $1 ! please wait... ${resetColor}"
+	execCommand=$(which $(grep "^Exec" /usr/share/xsessions/"$1".desktop | sed 's/Exec=//'))	
 	exec startx "$execCommand" 2>&1 > /dev/null
 }
 
 
 
 
-if [ ! isXServerRunning ] ; then
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] ; then
 	# reset the terminal
 	tput reset
 	printBanner
 	idleMenu
 	desktops="TTY $(ls /usr/share/xsessions/ | sed 's/.desktop//g')"
-	startDesktop $(echo $desktops | cut -d ' ' -f$((currentItem+1)))
+	userChoice=$(echo $desktops | cut -d ' ' -f$((currentItem+1)))
+	startDesktop $userChoice 
 else
 	echo "Error : Another Xserver is running!, Abort."
 fi
