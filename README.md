@@ -1,7 +1,7 @@
 # clidis
 A command line display manager to start your desktop more intractive!
 
-![clidis preview](https://raw.githubusercontent.com/virtualdemon/clidis/master/screenshot/screenshot.png)
+![clidis preview](https://raw.githubusercontent.com/hamidrezakp/clidis/master/screenshot/screenshot.png)
 
 ![RepoSize](https://img.shields.io/github/repo-size/hamidrezakp/clidis.svg) ![Contributors](https://img.shields.io/github/contributors/hamidrezakp/clidis.svg?style=flat-square)
     
@@ -36,12 +36,12 @@ A command line display manager to start your desktop more intractive!
     `echo $SHELL`
     
 ### TODO
-   [x] Adding squares to select options
-   [x] Adding vim key's for moving around options
-   [ ] Adding power options ( reboot, shutdown , ... )
-   [ ] Adding Sabooh (@mostafaAsadi) option to login page
-   [ ] Adding systemd-analyze to login page
-   [ ] Adding config file
+   - [x] Adding squares to select options
+   - [x] Adding vim key's for moving around options
+   - [ ] Adding power options ( reboot, shutdown , ... )
+   - [ ] Adding Sabooh (@mostafaAsadi) option to login page
+   - [ ] Adding systemd-analyze to login page
+   - [ ] Adding config file
     
 ### MORE
 
