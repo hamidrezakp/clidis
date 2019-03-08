@@ -25,7 +25,6 @@ redColor=$(tput setaf 1)
 greenColor=$(tput setaf 2)
 blueColor=$(tput setaf 4)
 boldText=$(tput bold)
-
 # function to print the menu
 printMenu() {
 	# get the desktop lists without .desktop extension from /usr/share/xsessions
