@@ -1,7 +1,7 @@
 #!/bin/bash - 
 #===============================================================================
 #
-#          FILE: clidis 
+#          FILE: clidis
 # 
 #         USAGE: ./clidis 
 # 
@@ -10,11 +10,15 @@
 #  REQUIREMENTS: being in tty! 
 #         NOTES: add your desktop in startDesktop function and run it!
 #        AUTHOR: VirtualDemon (VD) 
+#		 Hamid R. K. Pishghadam <hamidrkp@riseup.net>
 #       CREATED: 03/01/2019 12:38
+#	UPDATED: 03/08/2019 15:32
 #===============================================================================
 # you can fork me and make me better from : https://github.com/virtualdemon/clidis
 # licensed under GNU GENERAL PUBLIC LICENSE Version 3
 
+# global current item variable
+currentItem=0 
 # reset the terminal
 tput reset
 # set colors
@@ -23,63 +27,115 @@ redColor=$(tput setaf 1)
 greenColor=$(tput setaf 2)
 blueColor=$(tput setaf 4)
 boldText=$(tput bold)
-# check if another desktop environment is running
-if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-	# script banner
-	echo "
-	${boldText} 
-	${blueColor}
+
+# function to print the menu
+printMenu() {
+	# get the desktop lists without .desktop extension from /usr/share/xsessions
+	desktops="TTY $(ls /usr/share/xsessions/ | sed 's/.desktop//g')"
+	# set deCounter for printing the desktop environments
+	deCounter=0
+	# print desktop environments like:  [ ] xfce
+	for de in ${desktops[@]} ; do
+		printf "${redColor}[ ] ${greenColor}$de${resetColor}\n"
+		# increase deCounter until desktop environments finished...
+		((deCounter++))
+	done
+	echo -e "\n"
+}
+
+# function to change items
+changeItem() {
+	currentItem=$1
+	ofset=$2
+	move=$3
+	tput cup $((currentItem+ofset)) 1
+	printf " "
+	tput cup $((currentItem+ofset+move)) 1
+	printf "${redColor}x${resetColor}"
+}
+
+
+# function to idle menu and select items
+idleMenu() {
+	itemsCount=$(ls /usr/share/xsessions/ | sed 's/.desktop//g' | wc -w)
+	ofset=7 
+	printMenu
+	# set cursur to first item and select it
+	tput cup $ofset 1
+	printf "${redColor}x${resetColor}"
+	while read -sN1 key # 1 char (not delimiter), silent
+	do
+		# trigger Whitespace keys | TODO trigger only enter key in switch-case
+		if [ -z $key ] ; then
+			return
+		fi
+
+
+		# catch multi-char special key sequences
+		read -sN1 -t 0.0001 k1
+		read -sN1 -t 0.0001 k2
+		read -sN1 -t 0.0001 k3
+		key+=${k1}${k2}${k3}
+		case "$key" in 
+			
+			$'\e[A'|$'\e0A'|$'\e[D'|$'\e0D')  # cursor up, left: previous item
+				if [ $currentItem -gt 0 ] ; then
+					changeItem $currentItem $ofset -1
+					let "currentItem--"
+				fi;;	
+				
+			$'\e[B'|$'\e0B'|$'\e[C'|$'\e0C')  # cursor down, right: next item
+				if [ $currentItem -lt $itemsCount ] ; then
+					changeItem $currentItem $ofset +1
+					let "currentItem++"
+				fi;;	
+		esac                  
+	done
+}
+
+# function to print banner
+printBanner() {
+	echo "${boldText}${blueColor}
       _                  
      | | o     |  o      
  __  | |     __|      , 
 /    |/  |  /  |  |  / \_
 \___/|__/|_/\_/|_/|_/ \/ 	
-
 	${resetColor}"
-	# get the desktop lists without .desktop extension from /usr/share/xsessions
-	desktops=$(ls /usr/share/xsessions/ | sed 's/.desktop//g')
-	# set deCounter for printing the desktop environments
-	deCounter=0
-	# print desktop environments like:  1) xfce
-	for de in ${desktops[@]} ; do
-		if [ $deCounter -eq 0 ] ; then
-			echo "  ${redColor}0${resetColor}) ${greenColor}TTY${resetColor}"
-			((deCounter++))
-		fi
-		echo "  ${redColor}$deCounter${resetColor}) ${greenColor}$de${resetColor}"
-		# increase deCounter until desktop environments finished...
-		((deCounter++))
-	done
-	echo -e "\n"
-	# get the number of printed desktop from user
-	read -p $'\e[35mPlease choose the NUMBER of your installed DE or WM :\e[0m ' userChoice
-	# check user input 
-	if [[ ! $userChoice || $userChoice = *[^0-9]* ]]; then
-    		echo "${boldText}${redColor}Error: '$userChoice' is not a number.${resetColor}" >&2
-		exit -1
-	elif [[ $userChoice -gt $deCounter ]] ; then
-		echo "${boldText}${redColor}Error: '$userChoice' is not in range.${resetColor}" >&2
-		exit -1
-	fi
-	# custom function to start desktop environment
-	function startDesktop {
-		if [[ $1 -eq 0 ]] ; then
-			echo "${greenColor}Welcome to TTY!${resetColor}"
-			echo "${boldText}${blueColor}To logout from current user use <exit> command!${resetColor}"
-			exec $SHELL
-		fi
-		if [ -e ~/.xinitrc ] ; then
-			mv ~/.xinitrc ~/.xinitrc-$(date +%m-%d-%H-%M-%S)-bak
-		fi		
-		# get the name of desktop environment
-		chosenDesktop=$(echo $desktops | tr " " "\n" | sed -n "$1 p")
-		# start chosen desktop environment from Exec command in .desktop file!
-		echo "${greenColor}starting $chosenDesktop ! please wait... ${resetColor}"
-		execCommand=$(which $(grep "^Exec" /usr/share/xsessions/"$chosenDesktop".desktop | sed 's/Exec=//'))	
-		exec startx "$execCommand" 2>&1 > /dev/null
-	}
+}
 
-	startDesktop "$userChoice"
-else 
-	echo "${redColor}You're already running a graphical environment.${resetColor}"
+
+# function to check if another desktop environment is running
+isXserverRunning() {
+	if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+# function to start desktop environment
+function startDesktop {
+	if [[ $1 -eq 0 ]] ; then
+		tput clear
+		exec $SHELL
+	fi
+	if [ -e ~/.xinitrc ] ; then
+		mv ~/.xinitrc ~/.xinitrc-$(date +%m-%d-%H-%M-%S)-bak
+	fi		
+	# get the name of desktop environment
+	chosenDesktop=$(echo $desktops | tr " " "\n" | sed -n "$1 p")
+	# start chosen desktop environment from Exec command in .desktop file!
+	echo "${greenColor}starting $chosenDesktop ! please wait... ${resetColor}"
+	execCommand=$(which $(grep "^Exec" /usr/share/xsessions/"$chosenDesktop".desktop | sed 's/Exec=//'))	
+	exec startx "$execCommand" 2>&1 > /dev/null
+}
+
+if [ ! isXServerRunning ] ; then
+	printBanner
+	idleMenu
+	desktops="TTY $(ls /usr/share/xsessions/ | sed 's/.desktop//g')"
+	startDesktop $(echo $desktops | cut -d ' ' -f$((currentItem+1)))
+else
+	echo "Error : Another Xserver is running!, Abort."
 fi
