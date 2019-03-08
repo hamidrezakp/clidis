@@ -1,7 +1,7 @@
 #!/bin/bash - 
 #===============================================================================
 #
-#          FILE: clidis
+#          FILE: clidis 
 # 
 #         USAGE: ./clidis 
 # 
@@ -19,8 +19,6 @@
 
 # global current item variable
 currentItem=0 
-# reset the terminal
-tput reset
 # set colors
 resetColor=$(tput sgr0)
 redColor=$(tput setaf 1)
@@ -40,7 +38,7 @@ printMenu() {
 		# increase deCounter until desktop environments finished...
 		((deCounter++))
 	done
-	echo -e "\n"
+	echo -e "\nMove with arrow keys , vim keys :) and select with Enter or SpaceBar.\n"
 }
 
 # function to change items
@@ -78,13 +76,13 @@ idleMenu() {
 		key+=${k1}${k2}${k3}
 		case "$key" in 
 			
-			$'\e[A'|$'\e0A'|$'\e[D'|$'\e0D')  # cursor up, left: previous item
+			h|k|$'\e[A'|$'\e0A'|$'\e[D'|$'\e0D')  # cursor up, left: previous item
 				if [ $currentItem -gt 0 ] ; then
 					changeItem $currentItem $ofset -1
 					let "currentItem--"
 				fi;;	
 				
-			$'\e[B'|$'\e0B'|$'\e[C'|$'\e0C')  # cursor down, right: next item
+			j|l|$'\e[B'|$'\e0B'|$'\e[C'|$'\e0C')  # cursor down, right: next item
 				if [ $currentItem -lt $itemsCount ] ; then
 					changeItem $currentItem $ofset +1
 					let "currentItem++"
@@ -131,7 +129,12 @@ function startDesktop {
 	exec startx "$execCommand" 2>&1 > /dev/null
 }
 
+
+
+
 if [ ! isXServerRunning ] ; then
+	# reset the terminal
+	tput reset
 	printBanner
 	idleMenu
 	desktops="TTY $(ls /usr/share/xsessions/ | sed 's/.desktop//g')"
