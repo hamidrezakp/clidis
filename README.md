@@ -5,7 +5,7 @@ A command line display manager to start your desktop more intractive!
 
 ![RepoSize](https://img.shields.io/github/repo-size/hamidrezakp/clidis.svg) ![Contributors](https://img.shields.io/github/contributors/hamidrezakp/clidis.svg?style=flat-square)
     
-## automatic installation
+## AUTOMATIC INSTALLATION
 
 1. Download the script with `curl` or `wget` : 
 	
@@ -21,22 +21,22 @@ A command line display manager to start your desktop more intractive!
 
     `./clidis -i`
 
-## remove automatically
+## AUTOMATICALLY REMOVE
 
 Just run it with `-u` or `--uninstall` switch : `./clidis -u`
 
 
-## test  mode
+## TEST MODE
 
 After downloading the script you can just use `-t` or `--test-mode` to see what it's look like! : `./clidis -t`
 
-## configuration
+## CONFIGURATION
 
 The clidis configuartion is in **~/.config/clidis/config** you can tweak clidis alittle with defined variables! please don't mess with `systemDefaultDisplayManager` and `lastUserChoice` variable!
 
 You can enable or disable showing system status under the clidis logo and tweak them. 0 is for disable and 1 is for enable.
 
-## manual installation
+## MANUAL INSTALLATION
 
 1. Download the script with `curl` or `wget` into your home directory : 
 	
@@ -66,7 +66,7 @@ You can enable or disable showing system status under the clidis logo and tweak 
 	
 5. Reboot your system : `reboot`
 
-## manually remove
+## MANUALLY REMOVE
 
 1. Remove $HOME/.clidis : `rm ~/.clidis`
 
@@ -80,7 +80,7 @@ You can enable or disable showing system status under the clidis logo and tweak 
    - [x] Adding squares to select options
    - [x] Adding vim key's for moving around options
    - [x] Adding config file
-   - [ ] Adding power options ( reboot, shutdown , ... )
+   - [x] Adding power options ( reboot, shutdown , ... )
    - [ ] Adding Sabooh (@mostafaAsadi) option to login page
    - [ ] Adding systemd-analyze to login page
     
