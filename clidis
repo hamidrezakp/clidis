@@ -161,14 +161,15 @@ function systemStatus {
 
 # function to print banner
 function printBanner {
-	echo -e "\n"
-	center "	${boldText}${bannerTextColor} ██████╗██╗     ██╗██████╗ ██╗███████╗${resetColor}"
-	center "	${boldText}${bannerTextColor}██╔════╝██║     ██║██╔══██╗██║██╔════╝${resetColor}"
-	center "	${boldText}${bannerTextColor}██║     ██║     ██║██║  ██║██║███████╗${resetColor}"
-	center "	${boldText}${bannerTextColor}██║     ██║     ██║██║  ██║██║╚════██║${resetColor}"
-	center "	${boldText}${bannerTextColor}╚██████╗███████╗██║██████╔╝██║███████║${resetColor}"
-	center "	${boldText}${bannerTextColor} ╚═════╝╚══════╝╚═╝╚═════╝ ╚═╝╚══════╝${resetColor}"
-	systemStatus
+	echo -e "\n${boldText}${bannerTextColor}"
+	center " ██████╗██╗     ██╗██████╗ ██╗███████╗"
+	center "██╔════╝██║     ██║██╔══██╗██║██╔════╝"
+	center "██║     ██║     ██║██║  ██║██║███████╗"
+	center "██║     ██║     ██║██║  ██║██║╚════██║"
+	center "╚██████╗███████╗██║██████╔╝██║███████║"
+	center " ╚═════╝╚══════╝╚═╝╚═════╝ ╚═╝╚══════╝"
+    echo "${resetColor}"	
+    systemStatus
 }
 
 
@@ -209,7 +210,17 @@ function containsElement {
 # function to create th menu list entries and controll them with config file
 function menuEntries {
 	# manual for user 
-	center "		${normalTextColor}Select an entry using ${importantTextColor}up/down${normalTextColor} keys and ${importantTextColor}enter${normalTextColor} to confirm:${resetColor}" 
+	echo -n "${normalTextColor}"
+	center "Select an entry using" 
+	echo -n "${importantTextColor}" 
+	center "up/down" 
+	echo -n "${normalTextColor}" 
+	center " keys and "
+	echo -n "${importantTextColor}"
+	center "enter"
+	echo -n "${normalTextColor}"
+	center " to confirm:"
+	echo -n "${resetColor}" 
 	# get all installed graphical evironments
 	desktops=$(ls /usr/share/xsessions/ | sed 's/.desktop//g')
 	staticEntries=("TTY" "reboot" "shutdown")
