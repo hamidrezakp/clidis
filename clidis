@@ -111,6 +111,9 @@ function selectOption {
     while true; do
         # print options by overwriting the last lines
         local idx=0
+        
+        stty -echo
+
         for opt; do
             if [ $idx -eq $selected ]; then
 
@@ -126,6 +129,9 @@ function selectOption {
             fi
             ((idx++))
         done
+
+    	stty echo
+
         # user key control
         case `key_input` in
             enter) break;;
