@@ -1,7 +1,7 @@
 # clidis
 An interactive command line display manager!
 
-![clidis preview](https://raw.githubusercontent.com/virtualdemon/clidis/master/screenshot/screenshot_v2.0.png)
+![clidis preview](https://raw.githubusercontent.com/hamidrezakp/clidis/master/screenshot/screenshot_v2.0.png)
 
 ![RepoSize](https://img.shields.io/github/repo-size/hamidrezakp/clidis.svg) ![Contributors](https://img.shields.io/github/contributors/hamidrezakp/clidis.svg?style=flat-square)
     
@@ -32,7 +32,7 @@ After downloading the script you can just use `-t` or `--test-mode` to see what 
 
 ## CONFIGURATION
 
-The clidis configuartion is in **~/.config/clidis/config** you can tweak clidis a little with defined variables! please don't mess with `systemDefaultDisplayManager` and `lastUserChoice` variable!
+The clidis configuration is in **~/.config/clidis/config** you can tweak clidis a little with defined variables! please don't mess with `systemDefaultDisplayManager` and `lastUserChoice` variable!
 
 You can enable or disable showing system status under the clidis logo and tweak them (0 for disable and 1 for enable).
 
