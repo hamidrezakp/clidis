@@ -551,7 +551,8 @@ fi
 
 
 # main commands
-if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] ; then
+# Check if login shell
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] || [[ $(tty) == "/dev/tty"* ]]; then
 	# reset the terminal
 	tput reset
 	# print the script banner
