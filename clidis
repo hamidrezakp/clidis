@@ -367,9 +367,9 @@ function downloadClidis {
         fi
         # download clidis in $HOME/.clidis
         if [ $(which curl) ] ; then
-                curl -s https://raw.githubusercontent.com/virtualdemon/clidis/master/clidis -o $HOME/.clidis 
+                curl -s https://raw.githubusercontent.com/LaurenceWarne/clidis/original-rebased/clidis -o $HOME/.clidis 
         elif [ $(which wget ) ] ; then
-                wget --quiet https://raw.githubusercontent.com/virtualdemon/clidis/master/clidis -O $HOME/.clidis
+                wget --quiet https://raw.githubusercontent.com/LaurenceWarne/clidis/original-rebased/clidis -O $HOME/.clidis
         fi
 
 }
